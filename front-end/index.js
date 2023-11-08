@@ -76,7 +76,7 @@ function init() {
     expandWindow = document.querySelector(".expand-chat-window")
     root = document.documentElement;
     chatPopup.style.display = "none"
-    var host = ""
+    var host = "http://localhost:5005/webhooks/rest/webhook";
 
 
     //------------------------ ChatBot Toggler -------------------------
@@ -169,7 +169,8 @@ function scrollToBottomOfResults() {
 Frontend Part Completed
 ****************************************************************/
 
-// host = 'http://localhost:5005/webhooks/rest/webhook'
+host = 'http://localhost:5005/webhooks/rest/webhook'
+
 function send(message) {
     chatInput.type = "text"
     passwordInput = false;
