@@ -1,0 +1,49 @@
+version: "3.1"
+
+stories:
+
+- story: greetings
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: capabilities
+    - action: utter_capabilities
+
+- story: asking time zone
+  steps:
+    - intent: find_time_zone
+    - action: utter_ask_city_info
+    - intent: city_info
+    - action: utter_finding_timezone
+    - action: action_find_timezone
+
+- story: get_activities
+  steps:
+  - intent: request_activities
+  - action: utter_finding_activities
+  - action: action_get_activities
+
+- story: respond_to_thanks
+  steps:
+  - intent: thanks
+  - action: utter_no_problem
+
+- story: greet_time_zone_and_activities
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: find_time_zone
+    - action: utter_ask_city_info
+    - intent: city_info
+    - action: utter_finding_timezone
+    - action: action_find_timezone
+    - intent: request_activities
+    - action: utter_finding_activities
+    - action: action_get_activities
+    - action: utter_get_activities
+
+- story: asked_time_zone_directly
+  steps:
+    - intent: city_info
+    - action: utter_finding_timezone
+    - action: action_find_timezone

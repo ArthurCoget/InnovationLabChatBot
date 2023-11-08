@@ -1,0 +1,53 @@
+version: "3.1"
+
+intents:
+  - greet
+  - capabilities
+  - goodbye
+  - find_time_zone
+  - city_info
+  - request_activities
+  - thanks
+entities:
+  - location_act
+  - target_timezone
+slots:
+  location_act:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: location_act
+  target_timezone:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: target_timezone
+actions:
+  - action_find_timezone
+  - action_get_activities
+
+responses:
+  utter_greet:
+  - text: "Hey! How can i help you?"
+  utter_capabilities:
+  - text: |
+          "I can do a lot of things! 
+           Here are some subjects I can help you with: 
+              - You can ask me about activities in some cities, I will try my best to help you. 
+              - You can also ask me about timezones."
+  utter_ask_city_info:
+  - text: "Of witch city do you want to know the timezone? Please give me in this format: Continent/City (For example: America/New_York)"
+  utter_finding_timezone:
+  - text: "Give me a second to look it up the timezone for {target_timezone}."
+  utter_no_problem:
+  - text: "No problem, I hope I was helpfull."
+  utter_goodbye:
+  - text: "Bye"
+  utter_finding_activities:
+  - text: "Give me a second to look up some activities in {location_act}."
+  utter_get_activities:
+  - text: "Here are some popular activities in {location_act}: {extract}."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
