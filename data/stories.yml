@@ -17,11 +17,11 @@ stories:
     - action: utter_finding_timezone
     - action: action_find_timezone
 
-- story: get_activities
+- story: get_information
   steps:
-  - intent: request_activities
-  - action: utter_finding_activities
-  - action: action_get_activities
+  - intent: request_information
+  - action: utter_finding_information
+  - action: action_get_information
 
 - story: respond_to_thanks
   steps:
@@ -37,13 +37,18 @@ stories:
     - intent: city_info
     - action: utter_finding_timezone
     - action: action_find_timezone
-    - intent: request_activities
-    - action: utter_finding_activities
-    - action: action_get_activities
-    - action: utter_get_activities
+    - intent: request_information
+    - action: utter_finding_information
+    - action: action_get_information
 
 - story: asked_time_zone_directly
   steps:
     - intent: city_info
     - action: utter_finding_timezone
     - action: action_find_timezone
+
+- story: asked_point_of_interest
+  steps:
+    - intent: request_pois
+    - action: utter_finding_pois
+    - action: action_get_pois

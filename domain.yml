@@ -6,11 +6,13 @@ intents:
   - goodbye
   - find_time_zone
   - city_info
-  - request_activities
+  - request_information
   - thanks
+  - request_pois
 entities:
   - location_act
   - target_timezone
+  - city_name
 slots:
   location_act:
     type: text
@@ -20,34 +22,39 @@ slots:
   target_timezone:
     type: text
     mappings:
-    - type: from_entity
-      entity: target_timezone
+      - type: from_entity
+        entity: target_timezone
+  city_name:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: city_name
 actions:
   - action_find_timezone
-  - action_get_activities
+  - action_get_information
+  - action_get_pois
 
 responses:
   utter_greet:
-  - text: "Hey! How can i help you?"
+    - text: "Hey! How can i help you?"
   utter_capabilities:
-  - text: |
+    - text: |
           "I can do a lot of things! 
            Here are some subjects I can help you with: 
-              - You can ask me about activities in some cities, I will try my best to help you. 
+              - I can provide you with brief summaries of various cities. Feel free to ask me for information about different cities.
               - You can also ask me about timezones."
   utter_ask_city_info:
-  - text: "Of witch city do you want to know the timezone? Please give me in this format: Continent/City (For example: America/New_York)"
+    - text: "Of witch city do you want to know the timezone? Please give me in this format: Continent/City (For example: America/New_York)"
   utter_finding_timezone:
-  - text: "Give me a second to look it up the timezone for {target_timezone}."
+    - text: "Give me a second to look it up the timezone for {target_timezone}."
   utter_no_problem:
-  - text: "No problem, I hope I was helpfull."
+    - text: "No problem, I hope I was helpfull."
   utter_goodbye:
-  - text: "Bye"
-  utter_finding_activities:
-  - text: "Give me a second to look up some activities in {location_act}."
-  utter_get_activities:
-  - text: "Here are some popular activities in {location_act}: {extract}."
-
+    - text: "Bye"
+  utter_finding_information:
+    - text: "Give me a second to look up some information for {location_act}."
+  utter_finding_pois:
+    - text: "I will lookup some points off interest nearby {city_name}. This can take a minute."
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
