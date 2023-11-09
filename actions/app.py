@@ -1,25 +1,20 @@
 from flask import Flask, request, jsonify
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True, origins=['http://localhost:8000'])
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json(silent=True)
-    user_message = data['message']  # Veronderstel dat het bericht in een veld met de naam 'message' wordt verzonden vanuit de frontend
-    
-    # Stuur het gebruikersbericht naar de Rasa-chatbot en ontvang het antwoord
+    user_message = data['message']
     rasa_response = send_message_to_rasa(user_message)
-    
-    # Stuur het antwoord van de Rasa-chatbot terug naar de frontend
-    return jsonify({'response': rasa_response})
+    return jsonify(rasa_response)
 
 def send_message_to_rasa(message):
-    # Stuur het gebruikersbericht naar de Rasa-chatbot API
-    rasa_api_url = 'http://localhost:5005/webhooks/rest/webhook'  # Vervang dit door de daadwerkelijke URL van je Rasa-chatbot
+    rasa_api_url = 'http://localhost:5005/webhooks/rest/webhook'
     response = requests.post(rasa_api_url, json={'message': message})
-    
-    # Ontvang en retourneer het antwoord van de Rasa-chatbot
     rasa_response = response.json()
     return rasa_response
 

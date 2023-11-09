@@ -1,10 +1,3 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
-
-
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
@@ -19,7 +12,6 @@ import requests
 TIME_ZONE_URL = "http://worldtimeapi.org/api/timezone/"
 LOC_INF_URL = "https://en.wikivoyage.org/w/api.php"
 GEO_INF_URL = "http://api.openweathermap.org/geo/1.0/direct"
-#POIS_INF_URL = "https://test.api.amadeus.com/v1/reference-data/locations/pois"
 OVER_POI_URL = "https://overpass-api.de/api/interpreter"
 
 class ActionShowTimeZone(Action):
@@ -168,34 +160,3 @@ class MyHTMLParser(HTMLParser):
     
     def handle_data(self, data):
         self.data += data
-
-# Amadeus is very restricted so we stopped using it, the problem was also you need to refresh the api-key very often.
-        
-# amadeus_api_key = "zyX1eH0WMK2K8PK700uPOpFJg8Zk"
-
-#             geolocation = self.get_geolocation(city)
-#             if geolocation:
-#                 lat, lon = geolocation
-            
-#                 headers = {
-#                     "Authorization": f"Bearer {amadeus_api_key}"
-#                 }
-#                 params = {
-#                     "latitude":lat,
-#                     "longitude": lon,
-#                     "radius": 5
-
-#                 }
-#                 response = requests.get(POIS_INF_URL, params=params, headers=headers)
-#                 points_of_interest = response.json()
-#                 print(points_of_interest)
-#                 if "data" in points_of_interest:
-#                     data = points_of_interest["data"]
-#                     response_text = ""
-#                     for item in data:
-#                         name = item.get("name", "Unknown")
-#                         category = item.get("category", "Unknown")
-#                         tags = item.get("tags", [])
-#                         if tags and name and category:
-#                             new_line = '\n'
-#                             response_text += f"{new_line}You have {name} this is a {category}. Here are some associated tags: {', '.join(tags)}.{new_line}" 

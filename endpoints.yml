@@ -1,6 +1,9 @@
 action_endpoint:
-  url: "http://localhost:5055/webhook"
+  url: "http://localhost:5000/webhook"  # Updated to Flask endpoint
+  cors: "*"
 core_endpoint:
-  url: "http://localhost:5005"
+  url: "http://localhost:5005"  # Updated to Rasa server endpoint
+  cors: "*"
 nlu_endpoint:
-  url: "http://localhost:5005"
+  url: "http://localhost:5005"  # Updated to Rasa server endpoint
+  cors: "*"
