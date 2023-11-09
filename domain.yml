@@ -40,9 +40,10 @@ responses:
   utter_capabilities:
     - text: |
           "I can do a lot of things! 
-           Here are some subjects I can help you with: 
-              - I can provide you with brief summaries of various cities. Feel free to ask me for information about different cities.
-              - You can also ask me about timezones."
+           Here are some subjects I can help you with:
+                - If you have a specific city in mind and would like to know its timezone and current time, please provide the name of the city, and I'll give you the relevant information(format: Continent/City)" 
+                - If you're interested in learning about a particular city, just let me know the city's name, and I can provide you with a brief summary of that city.
+                - If you want recommendations for activities to do in a specific city, please specify the city, and I can suggest various things to see and do in that location.
   utter_ask_city_info:
     - text: "Of witch city do you want to know the timezone? Please give me in this format: Continent/City (For example: America/New_York)"
   utter_finding_timezone:

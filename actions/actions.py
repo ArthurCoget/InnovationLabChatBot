@@ -14,6 +14,8 @@ from rasa_sdk.executor import CollectingDispatcher
 
 from html.parser import HTMLParser
 
+from datetime import datetime
+
 import requests
 
 TIME_ZONE_URL = "http://worldtimeapi.org/api/timezone/"
@@ -46,8 +48,10 @@ class ActionShowTimeZone(Action):
             else:
                 if 'error' in res:
                     output = f"Sorry, we could not find the place you are looking for. Please check the spelling/ please type in this structure: Area/Region. You can also use 'world/timestamps' to get an overview of all supported cities and their timezones."
-                elif res['utc_offset']:
-                    output = f"Time zone is {res['utc_offset']}"
+                else:
+                    parsed_datetime = datetime.strptime(res['datetime'], "%Y-%m-%dT%H:%M:%S.%f%z")
+                    formatted_datetime = parsed_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                    output = f"The time zone is {res['utc_offset']} and it is now {formatted_datetime}"
         except:
             output = 'Ops! There are too many requests on the time zone API. Please try a few moments later...'
         dispatcher.utter_message(text=output)       
@@ -92,7 +96,6 @@ class ActionGetInformation(Action):
         dispatcher.utter_message(response_text)
         return []
 class ActionGetPointOfInterest(Action):
-
     def get_geolocation(self, city):
         openweathermap_api_key = "8105293046c7f3f036461a31be0278bd"
 
@@ -115,47 +118,45 @@ class ActionGetPointOfInterest(Action):
     def name(self) -> Text:
         return "action_get_pois"
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        city = tracker.get_slot("city_name")
-        geolocation = self.get_geolocation(city)
+        city = tracker.get_slot("location_act")
         if city:
-            if geolocation:
-                lat, lon = geolocation
-                radius = 10
-                print(f"lat and lon are: {lat} {lon}")
+            lat, lon = self.get_geolocation(city)
+            if lat is not None and lon is not None:
                 query = f"""
                     [out:json];
                     (
-                        node["tourism"]({lat - radius},{lon - radius},{lat + radius},{lon + radius});
-                        way["tourism"]({lat - radius},{lon - radius},{lat + radius},{lon + radius});
+                    node({lat - 0.5}, {lon - 0.5}, {lat + 0.5}, {lon + 0.5})["tourism"];
                     );
-                    out center 5;
+                    out body 10;
                     """
-                print(f"Overpass API Query: {query}")
 
                 response = requests.post(OVER_POI_URL, data=query)
                 data = response.json()
 
-                print(f"Overpass API Response: {data}")
 
                 tourist_pois = [
                     item for item in data['elements'] if 'tourism' in item['tags']
                 ]
-                print(f"Tourist POIs: {tourist_pois}")
                 if tourist_pois:
                     response_text = ""
                     for poi in tourist_pois:
                         name = poi.get('tags', {}).get('name', 'N/A')
                         category = poi.get('tags', {}).get('tourism', 'N/A')
                         website = poi.get('tags', {}).get('website', 'N/A')
-
-                        if name and category:
-                            response_text += f"You have {name} which is a {category}.\n"
-                        if website:
+                        info = poi.get('tags', {}).get('information', 'N/A')
+                        artworktype = poi.get('tags', {}).get('artwork_type', 'N/A')
+                        if name != 'N/A':
+                            response_text += f"You have {name}, category: {category}.\n"
+                        elif info != 'N/A':
+                            response_text += f"You have {info}, category: {category}.\n"
+                        elif artworktype != 'N/A':
+                            response_text += f"You have {artworktype}, category: {category}.\n" 
+                        if website != 'N/A':
                             response_text += f"Website: {website}\n"
                 else:
                     response_text = "No points of interest found in the specified city using OpenStreetMap."
             else:
-                response_text = f"Could not determine the geolocation for {city}."
+                response_text = "Did not find the given city."
         else:
             response_text = "Please provide a valid city name."
 
